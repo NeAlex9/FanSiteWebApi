@@ -18,8 +18,8 @@ namespace FanSiteService.Entities
         }
 
         [Key]
-        [Column("ms_id", TypeName = "int", Order = 1)]
-        public int Id { get; set; }
+        [Column("ms_id", TypeName = "tinyint", Order = 1)]
+        public byte Id { get; set; }
 
         [Required]
         [Column("ms_title", TypeName = "ntext", Order = 2)]

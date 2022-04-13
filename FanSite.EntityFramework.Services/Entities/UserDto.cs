@@ -35,10 +35,10 @@ namespace FanSiteService.Entities
         public string Email { get; set; }
 
         [Required]
-        [Column("us_role", TypeName = "int", Order = 5)]
+        [Column("us_role", TypeName = "tinyint", Order = 5)]
         [ForeignKey("Role")]
-        public int RoleId { get; set; }
+        public byte RoleId { get; set; }
 
-        public Role Role { get; set; }
+        public virtual RoleDto Role { get; set; }
     }
 }

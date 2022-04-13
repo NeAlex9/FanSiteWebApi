@@ -1,5 +1,4 @@
 using FanSiteService.Context;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +11,14 @@ builder.Services
     .AddControllers()
     .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);
 
+var connectionStringName = "FANSITE";
+
+var connectionString = builder
+    .Configuration
+    .GetConnectionString(connectionStringName);
+
 builder.Services
-    .AddDbContext<SiteContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+    .AddDbContext<SiteContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

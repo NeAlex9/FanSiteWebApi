@@ -40,7 +40,7 @@ namespace FanSite.EntityFramework.Services.Entities
 
         [Column("md_series_id", TypeName = "tinyint", Order = 8)]
         [ForeignKey("Series")]
-        public int SeriesId { get; set; }
+        public byte SeriesId { get; set; }
 
         public virtual MediaTypeDto Type { get; set; }
         public virtual MediaSeriesDto Series { get; set; }

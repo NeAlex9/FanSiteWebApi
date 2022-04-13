@@ -2,6 +2,7 @@
 using FanSiteService.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.Extensions.Configuration;
 
 namespace FanSiteService.Context
 {
@@ -26,11 +27,19 @@ namespace FanSiteService.Context
         public virtual DbSet<CommentDto> Comments { get; set; }
         public virtual DbSet<MediaTypeDto> MediaTypes { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(_connectionString);
+            const string connectionStringName = "FANSITE";
+
+            var configuration = new ConfigurationBuilder().
+                AddEnvironmentVariables()
+                .Build();
+
+            var connectionString = configuration.GetConnectionString(connectionStringName);
+
+            Console.WriteLine(connectionString);
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,7 +48,10 @@ namespace FanSiteService.Context
             modelBuilder.Entity<CommentDto>()
                 .HasKey(nameof(CommentDto.Id), nameof(CommentDto.MediaId), nameof(CommentDto.UserId));
 
-
+            modelBuilder
+                .Entity<CommentDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
         }
     }
 }

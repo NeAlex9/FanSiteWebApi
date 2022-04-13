@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DomainEntities;
-using FanSite.EntityFramework.Services.Entities;
 
-namespace FanSiteService.Entities
+namespace FanSite.EntityFramework.Services.Entities
 {
     [Table("media_type")]
     public class MediaTypeDto
