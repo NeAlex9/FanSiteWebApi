@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DomainEntities;
+﻿using DomainEntities;
 
-namespace FanSite.EntityFramework.Services.Services
+namespace FanSite.Services.Services
 {
     public interface IUserService
     {
