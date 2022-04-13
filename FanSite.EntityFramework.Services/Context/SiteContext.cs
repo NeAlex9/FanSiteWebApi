@@ -1,4 +1,5 @@
-﻿using FanSiteService.Entities;
+﻿using FanSite.EntityFramework.Services.Entities;
+using FanSiteService.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
@@ -35,7 +36,10 @@ namespace FanSiteService.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            /// ??
+            modelBuilder.Entity<CommentDto>()
+                .HasKey(nameof(CommentDto.Id), nameof(CommentDto.MediaId), nameof(CommentDto.UserId));
+
+
         }
     }
 }

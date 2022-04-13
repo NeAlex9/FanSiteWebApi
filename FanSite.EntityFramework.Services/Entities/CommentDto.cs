@@ -1,10 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DomainEntities;
+using FanSite.EntityFramework.Services.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FanSiteService.Entities
 {
     [Table("comment")]
+    [Index(nameof(Id), Name = "IX_id")]
+    [Index(nameof(MediaId), Name = "IX_media_id")]
+    [Index(nameof(UserId), Name = "IX_user_id")]
     public class CommentDto
     {
         [Column("cm_id", TypeName = "int", Order = 1)]
@@ -27,6 +32,6 @@ namespace FanSiteService.Entities
         public int UserId { get; set; }
 
         public virtual MediaDto Media { get; set; }
-        public virtual User User { get; set; }
+        public virtual UserDto User { get; set; }
     }
 }

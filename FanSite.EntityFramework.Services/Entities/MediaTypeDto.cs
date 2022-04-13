@@ -6,12 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainEntities;
+using FanSite.EntityFramework.Services.Entities;
 
 namespace FanSiteService.Entities
 {
     [Table("media_type")]
     public class MediaTypeDto
     {
+        public MediaTypeDto()
+        {
+            Media = new HashSet<MediaDto>();
+        }
+
         [Key]
         [Column("mt_id", TypeName = "tinyint", Order = 1)]
         public byte Id { get; set; }

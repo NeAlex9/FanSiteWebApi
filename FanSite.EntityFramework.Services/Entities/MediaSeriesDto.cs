@@ -5,12 +5,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FanSite.EntityFramework.Services.Entities;
 
 namespace FanSiteService.Entities
 {
     [Table("media_series")]
     public class MediaSeriesDto
     {
+        public MediaSeriesDto()
+        {
+            MediaCollection = new HashSet<MediaDto>();
+        }
+
         [Key]
         [Column("ms_id", TypeName = "int", Order = 1)]
         public int Id { get; set; }

@@ -11,6 +11,11 @@ namespace FanSiteService.Entities
     [Table("role")]
     public class RoleDto
     {
+        public RoleDto()
+        {
+            Users = new HashSet<UserDto>();
+        }
+
         [Key]
         [Column("rl_id", TypeName = "tinyint", Order = 1)]
         public byte Id { get; set; }

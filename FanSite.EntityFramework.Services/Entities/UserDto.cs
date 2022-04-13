@@ -6,10 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FanSiteService.Entities
 {
     [Table("user")]
+    [Index(nameof(Email), Name = "IX_email")]
+    [Index(nameof(RoleId), Name = "IX_role_id")]
     public class UserDto
     {
         [Key]
@@ -17,26 +20,22 @@ namespace FanSiteService.Entities
         public int Id { get; set; }
 
         [Required]
-        [Column("us_first_name", TypeName = "nvarchar", Order = 2)]
+        [Column("us_name", TypeName = "nvarchar", Order = 2)]
         [MaxLength(20)]
-        public string FirstName { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        [Column("us_second_name", TypeName = "nvarchar", Order = 3)]
-        [MaxLength(20)]
-        public string SecondName { get; set; }
-
-        [Required]
-        [Column("us_password", TypeName = "nvarchar", Order = 4)]
+        [Column("us_password", TypeName = "nvarchar", Order = 3)]
         [MaxLength(50)]
         public string Password { get; set; }
 
         [Required]
-        [Column("us_email", TypeName = "nvarchar", Order = 5)]
+        [Column("us_email", TypeName = "nvarchar", Order = 4)]
         [MaxLength(30)]
         public string Email { get; set; }
 
-        [Column("us_role", TypeName = "int", Order = 6)]
+        [Required]
+        [Column("us_role", TypeName = "int", Order = 5)]
         [ForeignKey("Role")]
         public int RoleId { get; set; }
 
