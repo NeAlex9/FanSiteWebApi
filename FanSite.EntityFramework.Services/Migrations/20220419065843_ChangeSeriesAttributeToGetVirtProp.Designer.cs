@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FanSite.EntityFramework.Services.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20220413171729_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220419065843_ChangeSeriesAttributeToGetVirtProp")]
+    partial class ChangeSeriesAttributeToGetVirtProp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,7 +57,7 @@ namespace FanSite.EntityFramework.Services.Migrations
 
                     b.Property<byte>("SeriesId")
                         .HasColumnType("tinyint")
-                        .HasColumnName("md_series_id")
+                        .HasColumnName("md_series")
                         .HasColumnOrder(8);
 
                     b.Property<string>("Title")
@@ -84,9 +84,12 @@ namespace FanSite.EntityFramework.Services.Migrations
             modelBuilder.Entity("FanSite.EntityFramework.Services.Entities.MediaTypeDto", b =>
                 {
                     b.Property<byte>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
                         .HasColumnName("mt_id")
                         .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<byte>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -145,9 +148,12 @@ namespace FanSite.EntityFramework.Services.Migrations
             modelBuilder.Entity("FanSiteService.Entities.MediaSeriesDto", b =>
                 {
                     b.Property<byte>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
                         .HasColumnName("ms_id")
                         .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<byte>("Id"), 1L, 1);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -163,9 +169,12 @@ namespace FanSite.EntityFramework.Services.Migrations
             modelBuilder.Entity("FanSiteService.Entities.RoleDto", b =>
                 {
                     b.Property<byte>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
                         .HasColumnName("rl_id")
                         .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<byte>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()

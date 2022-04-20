@@ -39,7 +39,9 @@ namespace FanSiteService.Context
             var connectionString = configuration.GetConnectionString(connectionStringName);
 
             Console.WriteLine(connectionString);
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,6 +52,31 @@ namespace FanSiteService.Context
 
             modelBuilder
                 .Entity<CommentDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<MediaDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<MediaTypeDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<MediaSeriesDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<UserDto>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<RoleDto>()
                 .Property(e => e.Id)
                 .ValueGeneratedOnAdd();
         }

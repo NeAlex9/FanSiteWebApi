@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using DomainEntities;
 using FanSite.EntityFramework.Services.Entities;
+using FanSite.Services.Entities;
 using FanSiteService.Entities;
 
 namespace FanSite.EntityFramework.Services.Mapper
@@ -14,8 +10,12 @@ namespace FanSite.EntityFramework.Services.Mapper
     {
         public MapperProfile()
         {
-            this.CreateMap<Comment, CommentDto>().ReverseMap();
-            this.CreateMap<Media, MediaDto>().ReverseMap();
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Media, MediaDto>().ReverseMap();
+            CreateMap<MediaType, MediaTypeDto>().ReverseMap();
+            CreateMap<MediaSeries, MediaSeriesDto>().ReverseMap();
+            CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<RoleDto, Role>().ReverseMap();
         }
     }
 

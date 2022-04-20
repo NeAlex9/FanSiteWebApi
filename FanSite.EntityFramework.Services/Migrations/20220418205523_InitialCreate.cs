@@ -13,7 +13,8 @@ namespace FanSite.EntityFramework.Services.Migrations
                 name: "media_series",
                 columns: table => new
                 {
-                    ms_id = table.Column<byte>(type: "tinyint", nullable: false),
+                    ms_id = table.Column<byte>(type: "tinyint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ms_title = table.Column<string>(type: "ntext", nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +26,8 @@ namespace FanSite.EntityFramework.Services.Migrations
                 name: "media_type",
                 columns: table => new
                 {
-                    mt_id = table.Column<byte>(type: "tinyint", nullable: false),
+                    mt_id = table.Column<byte>(type: "tinyint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     mt_name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
                 },
                 constraints: table =>
@@ -37,7 +39,8 @@ namespace FanSite.EntityFramework.Services.Migrations
                 name: "role",
                 columns: table => new
                 {
-                    rl_id = table.Column<byte>(type: "tinyint", nullable: false),
+                    rl_id = table.Column<byte>(type: "tinyint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     rl_name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>

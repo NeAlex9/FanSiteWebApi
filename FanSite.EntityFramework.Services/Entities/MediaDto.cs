@@ -30,15 +30,18 @@ namespace FanSite.EntityFramework.Services.Entities
         [Column("md_rating", TypeName = "float", Order = 5)]
         public double Rating { get; set; }
 
+        [Column("md_photo", TypeName = "ntext", Order = 6)]
+        public byte[]? Photo { get; set; }
+
         [Required]
-        [Column("md_is_upcoming", TypeName = "bit", Order = 6)]
+        [Column("md_is_upcoming", TypeName = "bit", Order = 7)]
         public bool IsUpcoming { get; set; }
 
-        [Column("md_type", TypeName = "tinyint", Order = 7)]
+        [Column("md_type", TypeName = "tinyint", Order = 8)]
         [ForeignKey("Type")]
         public byte TypeId { get; set; }
 
-        [Column("md_series_id", TypeName = "tinyint", Order = 8)]
+        [Column("md_series", TypeName = "tinyint", Order = 9)]
         [ForeignKey("Series")]
         public byte SeriesId { get; set; }
 
