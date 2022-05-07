@@ -8,7 +8,7 @@ namespace FanSite.Services.Services
 {
     public interface IMediaPictureService
     {
-        Task<byte[]> GetPicture(int id);
+        Task<byte[]?> GetPicture(int id);
 
         Task<bool> DeletePicture(int id);
 

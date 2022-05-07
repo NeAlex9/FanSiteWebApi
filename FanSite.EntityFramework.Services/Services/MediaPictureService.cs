@@ -1,6 +1,5 @@
-﻿using System.Linq;
+﻿using FanSite.EntityFramework.Services.Context;
 using FanSite.Services.Services;
-using FanSiteService.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace FanSite.EntityFramework.Services.Services
@@ -14,7 +13,7 @@ namespace FanSite.EntityFramework.Services.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<byte[]> GetPicture(int id)
+        public async Task<byte[]?> GetPicture(int id)
         {
             var dto = await _context
                 .Media
@@ -23,7 +22,7 @@ namespace FanSite.EntityFramework.Services.Services
                 .FirstOrDefaultAsync();
             if (dto is null || dto.Photo is null)
             {
-                return new byte[] { };
+                return null;
             }
 
             return dto.Photo;
@@ -60,8 +59,7 @@ namespace FanSite.EntityFramework.Services.Services
             await using var memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
             var bytes = memoryStream.ToArray();
-            dto.Photo = new byte[]{};
-            bytes.CopyTo(dto.Photo, 0);
+            dto.Photo = bytes;
 
             var updatedRows = await _context.SaveChangesAsync();
             return updatedRows > 0;

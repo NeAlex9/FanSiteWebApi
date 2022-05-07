@@ -1,4 +1,4 @@
-﻿using DomainEntities;
+﻿using FanSite.Services.Entities;
 using FanSite.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 

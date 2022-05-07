@@ -1,4 +1,4 @@
-﻿using DomainEntities;
+﻿using FanSite.Services.Entities;
 
 namespace FanSite.Services.Services
 {

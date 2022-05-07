@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DomainEntities;
-using FanSite.EntityFramework.Services.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FanSiteService.Entities
+namespace FanSite.EntityFramework.Services.Entities
 {
     [Table("comment")]
     [Index(nameof(Id), Name = "IX_id")]

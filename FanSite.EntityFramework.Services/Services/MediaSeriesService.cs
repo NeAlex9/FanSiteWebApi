@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using DomainEntities;
+﻿using AutoMapper;
+using FanSite.EntityFramework.Services.Context;
+using FanSite.EntityFramework.Services.Entities;
 using FanSite.Services.Entities;
 using FanSite.Services.Services;
-using FanSite.Services.Services.MediaSelector;
-using FanSiteService.Context;
-using FanSiteService.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FanSite.EntityFramework.Services.Services

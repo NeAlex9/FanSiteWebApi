@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using DomainEntities;
 using FanSite.EntityFramework.Services.Entities;
 using FanSite.Services.Entities;
-using FanSiteService.Entities;
 
 namespace FanSite.EntityFramework.Services.Mapper
 {

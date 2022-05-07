@@ -1,7 +1,5 @@
-﻿using DomainEntities;
-using FanSite.Services.Entities;
+﻿using FanSite.Services.Entities;
 using FanSite.Services.Services;
-using FanSite.Services.Services.MediaSelector;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FanSiteWebApi.Controllers
@@ -11,10 +9,12 @@ namespace FanSiteWebApi.Controllers
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;
+        private readonly IMediaPictureService _mediaPictureService;
 
-        public MediaController(IMediaService mediaService)
+        public MediaController(IMediaService mediaService, IMediaPictureService mediaPictureService)
         {
-            _mediaService = mediaService;
+            _mediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
+            _mediaPictureService = mediaPictureService ?? throw new ArgumentNullException(nameof(mediaPictureService));
         }
 
         [HttpGet("{id}")]
@@ -30,17 +30,13 @@ namespace FanSiteWebApi.Controllers
         }
 
         [HttpGet("{offset}/{limit}")]
-        public async IAsyncEnumerable<Media> GetMedia([FromRoute] int offset, [FromRoute] int limit, [FromQuery] Query query)
+        public async IAsyncEnumerable<Media> GetMedia([FromRoute] int offset, [FromRoute] int limit)
         { 
-            await foreach (var media in _mediaService.GetMedia(offset, limit, query))
+            await foreach (var media in _mediaService.GetMedia(offset, limit))
             {
                 yield return media;
             }
         }
-
-        [HttpGet("length")]
-        public async Task<int> GetMediaLength([FromQuery] Query query) =>
-            await _mediaService.GetMediaLength(query);
 
         [HttpPost]
         public async Task<ActionResult<Media>> CreateMedia([FromBody] Media media)
@@ -59,10 +55,61 @@ namespace FanSiteWebApi.Controllers
             var result = await _mediaService.DeleteMedia(id);
             if (!result)
             {
-                return this.NotFound();
+                return NotFound();
             }
 
-            return this.Ok();
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMedia([FromBody]Media media, [FromRoute]int id)
+        {
+            var result = await _mediaService.UpdateMedia(id, media);
+            if (result)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        [HttpPut("{id}/picture")]
+        public async Task<IActionResult> UpdateMediaPicture(int id, IFormFile formFile)
+        {
+            ArgumentNullException.ThrowIfNull(formFile);
+            var result = await _mediaPictureService
+                .UpdatePicture(id, formFile.OpenReadStream());
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("{id}/picture")]
+        public async Task<IActionResult> GetMediaPicture(int id)
+        {
+            var pictureBytes = await _mediaPictureService
+                .GetPicture(id);
+            if (pictureBytes is null)
+            {
+                return NotFound();
+            }
+
+            return File(pictureBytes, "image/jpg");
+        }
+
+        [HttpDelete("{id}/picture")]
+        public async Task<IActionResult> DeleteMediaPicture(int id)
+        {
+            var result = await _mediaPictureService.DeletePicture(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }

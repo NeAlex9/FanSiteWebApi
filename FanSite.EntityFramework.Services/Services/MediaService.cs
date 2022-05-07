@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
+using FanSite.EntityFramework.Services.Context;
 using FanSite.EntityFramework.Services.Entities;
 using FanSite.Services.Entities;
 using FanSite.Services.Services;
-using FanSite.Services.Services.MediaSelector;
-using FanSiteService.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace FanSite.EntityFramework.Services.Services
@@ -12,31 +11,22 @@ namespace FanSite.EntityFramework.Services.Services
     {
         private readonly SiteContext _context;
         private readonly IMapper _mapper;
-        private readonly IMediaSelectorService _mediaSelectorService;
 
-        public MediaService(SiteContext context, IMapper mapper, IMediaSelectorService mediaSelectorService)
+        public MediaService(SiteContext context, IMapper mapper)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _mediaSelectorService = mediaSelectorService ?? throw new ArgumentNullException(nameof(mediaSelectorService));
         }
 
-        public async IAsyncEnumerable<Media> GetMedia(int offset, int limit, Query query)
-        {
-            await foreach (var media in _context
-                               .Media
-                               .Include(media => media.Series)
-                               .Include(media => media.Type)
-                               .AsNoTracking()
-                               .AsEnumerable()
-                               .Where(media => _mediaSelectorService.Verify(_mapper.Map<Media>(media), query))
-                               .Take(limit)
-                               .Skip(offset)
-                               .ToAsyncEnumerable())
-            {
-                yield return _mapper.Map<Media>(media);
-            }
-        }
+        public IAsyncEnumerable<Media> GetMedia(int offset, int limit) => _context
+                .Media
+                .Include(media => media.Series)
+                .Include(media => media.Type)
+                .AsNoTracking()
+                .Take(limit)
+                .Skip(offset)
+                .Select(dto => _mapper.Map<Media>(dto))
+                .ToAsyncEnumerable();
 
         public async Task<Media?> GetMediaById(int id)
         {
@@ -55,16 +45,18 @@ namespace FanSite.EntityFramework.Services.Services
             return _mapper.Map<Media>(mediaDto);
         }
 
-        public async Task<int> GetMediaLength(Query query) =>
-            await _context
-                .Media
-                .Where(media => _mediaSelectorService.Verify(_mapper.Map<Media>(media), query))
-                .AsNoTracking()
-                .CountAsync();
-
-        public Task<bool> UpdateMedia(int id, Media media)
+        public async Task<bool> UpdateMedia(int id, Media media)
         {
-            throw new NotImplementedException();
+            var mediaDto = await _context
+                .Media
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (mediaDto is null)
+            {
+                return false;
+            }
+
+            UpdateMedia(mediaDto, media);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteMedia(int id)
@@ -111,6 +103,18 @@ namespace FanSite.EntityFramework.Services.Services
             await _context.Media.AddAsync(dto);
             await _context.SaveChangesAsync();
             return dto.Id;
+        }
+
+        private void UpdateMedia(MediaDto dto, Media media)
+        {
+            dto.Type.Id = media.Type.Id;
+            dto.Description = media.Description;
+            dto.IsUpcoming = media.IsUpcoming;
+            dto.Photo = media.Photo;
+            dto.PublicationDate = media.PublicationDate;
+            dto.Rating = media.Rating;
+            dto.Series.Id = media.Series.Id;
+            dto.Title = media.Title;
         }
     }
 }

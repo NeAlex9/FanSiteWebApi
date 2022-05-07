@@ -1,10 +1,8 @@
 ﻿using FanSite.EntityFramework.Services.Entities;
-using FanSiteService.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Configuration;
 
-namespace FanSiteService.Context
+namespace FanSite.EntityFramework.Services.Context
 {
     public class SiteContext : DbContext
     {
@@ -37,11 +35,6 @@ namespace FanSiteService.Context
                 .Build();
 
             var connectionString = configuration.GetConnectionString(connectionStringName);
-
-            Console.WriteLine(connectionString);
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DomainEntities;
+using FanSite.EntityFramework.Services.Context;
 using FanSite.EntityFramework.Services.Entities;
+using FanSite.Services.Entities;
 using FanSite.Services.Services;
-using FanSiteService.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace FanSite.EntityFramework.Services.Services

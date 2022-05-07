@@ -1,6 +1,4 @@
-﻿using DomainEntities;
-
-namespace FanSite.Services.Entities
+﻿namespace FanSite.Services.Entities
 {
     public class Media
     {
