@@ -1,5 +1,4 @@
-﻿using FanSite.EntityFramework.Services.Services;
-using FanSite.Services.Entities;
+﻿using FanSite.Services.Entities;
 using FanSite.Services.Exceptions;
 using FanSite.Services.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,20 +9,56 @@ namespace FanSiteWebApi.Controllers
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private const string _authCookieName = "jwt";
+        private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(ITokenService tokenService, IUserService userService)
         {
-            _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Authenticate([FromBody] UserCredentials userCredentials)
+        [HttpPost("signUp")]
+        public async Task<ActionResult<string>> SignUp([FromBody] User user)
+        {
+           var result =  await _userService.CreateUserAsync(user);
+           if (result <= 0)
+           {
+               return NotFound();
+           }
+
+           var securityToken = _tokenService.GetToken();
+
+            Response.Cookies.Append(_authCookieName, securityToken, new CookieOptions
+            {
+                HttpOnly = true,
+            });
+
+           return Ok();
+        }
+
+        [HttpPost("logOut")]
+        public async Task<IActionResult> LogOut()
+        {
+            Response.Cookies.Delete(_authCookieName);
+            return Ok();
+        }
+
+        [HttpPost("logIn")]
+        public async Task<IActionResult> LogIn([FromBody] UserCredentials userCredentials)
         {
             try
             {
-                string token = await _authenticationService.Authenticate(userCredentials);
-                return Ok(token);
+                await _userService.ValidateCredentials(userCredentials);
+                string securityToken = _tokenService.GetToken();
+
+                Response.Cookies.Append(_authCookieName, securityToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                });
+
+                return Ok();
             }
             catch (InvalidCredentialsException)
             {

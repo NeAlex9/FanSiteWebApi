@@ -47,7 +47,6 @@ builder.Services
     .AddScoped<ICommentService, CommentsService>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<IRoleService, RoleService>()
-    .AddScoped<IAuthenticationService, AuthenticationService>()
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<IMapper, Mapper>(_ => new Mapper(new MapperConfiguration(config => config.AddProfile(new FanSite.EntityFramework.Services.Mapper.MapperProfile())))); ;
 
