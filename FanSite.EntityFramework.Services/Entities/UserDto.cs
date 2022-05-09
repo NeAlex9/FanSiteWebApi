@@ -20,7 +20,7 @@ namespace FanSite.EntityFramework.Services.Entities
 
         [Required]
         [Column("us_password", TypeName = "nvarchar", Order = 3)]
-        [MaxLength(50)]
+        [MaxLength(73)]
         public string Password { get; set; }
 
         [Required]

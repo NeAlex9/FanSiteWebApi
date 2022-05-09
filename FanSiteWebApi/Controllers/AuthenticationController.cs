@@ -1,4 +1,5 @@
-﻿using FanSite.Services.Entities;
+﻿using System;
+using FanSite.Services.Entities;
 using FanSite.Services.Exceptions;
 using FanSite.Services.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace FanSiteWebApi.Controllers
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private const string _authCookieName = "jwt";
+        private const string AuthCookieName = "jwt";
         private readonly ITokenService _tokenService;
         private readonly IUserService _userService;
 
@@ -30,8 +31,12 @@ namespace FanSiteWebApi.Controllers
 
            var securityToken = _tokenService.GetToken();
 
-            Response.Cookies.Append(_authCookieName, securityToken, new CookieOptions
+            Response.Cookies.Append(AuthCookieName, securityToken, new CookieOptions
             {
+                Expires = DateTime.Now.AddDays(1),
+                IsEssential = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
                 HttpOnly = true,
             });
 
@@ -39,9 +44,17 @@ namespace FanSiteWebApi.Controllers
         }
 
         [HttpPost("logOut")]
-        public async Task<IActionResult> LogOut()
+        public IActionResult LogOut()
         {
-            Response.Cookies.Delete(_authCookieName);
+            Response.Cookies.Append(AuthCookieName, "", new CookieOptions
+            {
+                IsEssential = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Expires = DateTime.Now.AddDays(-1),
+                HttpOnly = true,
+            });
+
             return Ok();
         }
 
@@ -50,11 +63,15 @@ namespace FanSiteWebApi.Controllers
         {
             try
             {
-                await _userService.ValidateCredentials(userCredentials);
+                await _userService.ValidateCredentialsAsync(userCredentials);
                 string securityToken = _tokenService.GetToken();
 
-                Response.Cookies.Append(_authCookieName, securityToken, new CookieOptions
+                Response.Cookies.Append(AuthCookieName, securityToken, new CookieOptions
                 {
+                    Expires = DateTime.Now.AddDays(1),
+                    IsEssential = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = true,
                     HttpOnly = true,
                 });
 

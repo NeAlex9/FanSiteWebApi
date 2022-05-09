@@ -3,5 +3,6 @@
     public interface ITokenService
     {
         string GetToken();
+        bool ValidateToken(string jwt);
     }
 }

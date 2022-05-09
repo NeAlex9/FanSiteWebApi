@@ -28,19 +28,11 @@ namespace FanSite.EntityFramework.Services.Services
             .Select(dto => _mapper.Map<User>(dto))
             .ToAsyncEnumerable();
 
-        public Task<bool> UpdateUserAsync(int id, User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteUserAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<int> CreateUserAsync(User user)
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password = hashedPassword;
             var dto = _mapper.Map<UserDto>(user);
 
             var roleDto = await _context
@@ -78,7 +70,14 @@ namespace FanSite.EntityFramework.Services.Services
             return _mapper.Map<User>(dto);
         }
 
-        public async Task ValidateCredentials(UserCredentials userCredentials)
+        public async Task<User?> GetUserByEmailAsync(string email) =>
+            await _context.Users
+                .AsNoTracking()
+                .Where(user => user.Email == email)
+                .Select(dto => _mapper.Map<User>(dto))
+                .FirstOrDefaultAsync();
+        
+        public async Task ValidateCredentialsAsync(UserCredentials userCredentials)
         {
             var user = await _context.Users
                 .AsNoTracking()
@@ -95,7 +94,7 @@ namespace FanSite.EntityFramework.Services.Services
         private bool AreValidCredentials(UserCredentials userCredentials, User user)
         {
             return user.Email == userCredentials.Email
-                   && user.Password == userCredentials.Password;
+                   && BCrypt.Net.BCrypt.Verify(userCredentials.Password, user.Password);
         }
     }
 }

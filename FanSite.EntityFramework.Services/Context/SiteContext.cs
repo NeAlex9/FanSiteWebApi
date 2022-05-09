@@ -34,7 +34,10 @@ namespace FanSite.EntityFramework.Services.Context
                 AddEnvironmentVariables()
                 .Build();
 
+           
             var connectionString = configuration.GetConnectionString(connectionStringName);
+            Console.WriteLine(connectionString);
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

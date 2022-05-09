@@ -28,7 +28,7 @@ namespace FanSiteWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MediaType>> CreateMediaType([FromBody] MediaSeries mediaSeries)
+        public async Task<ActionResult<MediaType>> CreateMediaSeries([FromBody] MediaSeries mediaSeries)
         {
             var id = await _mediaSeriesService.CreateMediaSeries(mediaSeries);
             mediaSeries.Id = (byte)id;
@@ -39,7 +39,7 @@ namespace FanSiteWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMediaType([FromRoute] byte id)
+        public async Task<IActionResult> DeleteMediaSeries([FromRoute] byte id)
         {
             var result = await _mediaSeriesService.DeleteMediaSeries(id);
             if (!result)

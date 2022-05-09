@@ -18,7 +18,7 @@ builder.Services
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:3000")));
+                .WithOrigins(new []{"http://localhost:3000", "https://localhost:7194" })));
 
 builder.Services
     .AddControllers()
@@ -59,15 +59,11 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseAuthentication();
-
 app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
 
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {

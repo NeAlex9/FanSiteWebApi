@@ -37,9 +37,8 @@ namespace FanSiteWebApi.Controllers
             }, mediaType);
         }
 
-
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMediaSeries([FromRoute] byte id)
+        public async Task<IActionResult> DeleteMediaType([FromRoute] byte id)
         {
             var result = await _mediaTypeService.DeleteMediaType(id);
             if (!result)

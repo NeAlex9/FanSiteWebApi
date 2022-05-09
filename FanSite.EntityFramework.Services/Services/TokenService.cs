@@ -26,6 +26,29 @@ namespace FanSite.EntityFramework.Services.Services
             return token;
         }
 
+        public bool ValidateToken(string jwt)
+        {
+            byte[] securityKey = Encoding.UTF8.GetBytes(_appSettings.EncryptionKey);
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(jwt, new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(securityKey),
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                }, out SecurityToken token);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+
         private SecurityTokenDescriptor GetTokenDescriptor()
         {
             const int expiringDays = 7;
@@ -38,6 +61,7 @@ namespace FanSite.EntityFramework.Services.Services
                 Expires = DateTime.UtcNow.AddDays(expiringDays),
                 SigningCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature)
             };
+
 
             return tokenDescriptor;
         }

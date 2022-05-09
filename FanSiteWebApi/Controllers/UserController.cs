@@ -15,6 +15,17 @@ namespace FanSiteWebApi.Controllers
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
+        [HttpGet("ByEmail")]
+        public async Task<ActionResult<User>> GetUserByEmail([FromQuery]string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById([FromRoute]int id)
