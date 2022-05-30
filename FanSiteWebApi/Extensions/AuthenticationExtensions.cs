@@ -10,12 +10,26 @@ namespace FanSiteWebApi.Extensions
         {
             services.AddAuthentication(authOptions =>
                 {
-                    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authOptions.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.SaveToken = true;
+                    jwtOptions.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context => {
+
+                            if (context.Request.Cookies.ContainsKey("jwt"))
+                            {
+                                context.Token = context.Request.Cookies["jwt"];
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateAudience = false,
@@ -25,7 +39,13 @@ namespace FanSiteWebApi.Extensions
                         ValidateLifetime = true,
                         LifetimeValidator = LifetimeValidator
                     };
-                });
+                })
+                .AddCookie(options =>
+                {
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                    options.Cookie.IsEssential = true;
+                }); ;
 
             return services;
         }
